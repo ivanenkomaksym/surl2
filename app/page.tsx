@@ -27,8 +27,12 @@ export default function Home() {
     }
   };
 
-  const copyToClipboard = () => {
-    navigator.clipboard.writeText(shortUrl);
+  const copyToClipboard = async () => {
+    try {
+      await navigator.clipboard.writeText(shortUrl);
+    } catch (err) {
+      console.error("Failed to copy to clipboard:", err);
+    }
   };
 
   return (
