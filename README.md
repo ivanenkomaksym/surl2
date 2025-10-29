@@ -39,7 +39,25 @@ cd surl2
 
 # Install dependencies
 npm install
+
+# Configure environment variables
+cp .env.example .env.local
+# Edit .env.local with your configuration
 ```
+
+### Environment Configuration
+
+Create a `.env.local` file in the root directory:
+
+```env
+# Base URL for the URL shortener service
+NEXT_PUBLIC_BASE_URL=http://localhost
+```
+
+**Environment Variables:**
+- `NEXT_PUBLIC_BASE_URL`: Base URL for the URL shortener service
+  - Development: `http://localhost`
+  - Production: `https://short.ivanenkomak.com`
 
 ### Development
 
@@ -93,7 +111,12 @@ The frontend integrates with the following API endpoints:
 
 ### Shorten URL
 ```
-GET /shorten?long_url={long_url}
+POST /shorten
+Content-Type: application/json
+
+{
+  "long_url": "https://example.com/very/long/url"
+}
 ```
 Returns a shortened URL for the provided long URL.
 
@@ -102,6 +125,8 @@ Returns a shortened URL for the provided long URL.
 GET /${shortenedUrl}/summary
 ```
 Returns analytics data for a shortened URL.
+
+The API base URL is configurable through environment variables and automatically switches between development and production environments.
 
 ## Analytics Model
 

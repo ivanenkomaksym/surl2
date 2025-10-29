@@ -7,12 +7,13 @@ export interface Analytic {
 }
 
 export interface ShortenResponse {
-  shortUrl: string;
-  longUrl: string;
+  short_url: string;
+  long_url: string;
+  analytics: Analytic[];
 }
 
 export interface SummaryResponse {
-  shortUrl: string;
-  longUrl: string;
+  short_url: string;
+  long_url: string;
   analytics: Analytic[];
 }
