@@ -4,6 +4,10 @@ export interface Analytic {
   os?: string;
   ip?: string;
   location?: string;
+  referrer?: string;
+  device_type?: string;
+  browser?: string;
+  user_agent?: string;
 }
 
 export interface ShortenResponse {
