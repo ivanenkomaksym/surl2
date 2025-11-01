@@ -4,15 +4,20 @@ export interface Analytic {
   os?: string;
   ip?: string;
   location?: string;
+  referrer?: string;
+  device_type?: string;
+  browser?: string;
+  user_agent?: string;
 }
 
 export interface ShortenResponse {
-  shortUrl: string;
-  longUrl: string;
+  short_url: string;
+  long_url: string;
+  analytics: Analytic[];
 }
 
 export interface SummaryResponse {
-  shortUrl: string;
-  longUrl: string;
+  short_url: string;
+  long_url: string;
   analytics: Analytic[];
 }

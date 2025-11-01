@@ -1,0 +1,93 @@
+labels:
+  # Type labels
+  - name: "bug"
+    color: "d73a4a"
+    description: "Something isn't working"
+  
+  - name: "enhancement"
+    color: "a2eeef"
+    description: "New feature or request"
+  
+  - name: "documentation"
+    color: "0075ca"
+    description: "Improvements or additions to documentation"
+  
+  - name: "security"
+    color: "b60205"
+    description: "Security related issues"
+  
+  - name: "performance"
+    color: "ff9500"
+    description: "Performance improvements"
+  
+  - name: "refactoring"
+    color: "fbca04"
+    description: "Code refactoring without functional changes"
+
+  # Priority labels
+  - name: "priority/low"
+    color: "c5def5"
+    description: "Low priority"
+  
+  - name: "priority/medium"
+    color: "fef2c0"
+    description: "Medium priority"
+  
+  - name: "priority/high"
+    color: "ff9500"
+    description: "High priority"
+  
+  - name: "priority/critical"
+    color: "b60205"
+    description: "Critical priority"
+
+  # Status labels
+  - name: "needs-triage"
+    color: "ededed"
+    description: "Needs initial review and prioritization"
+  
+  - name: "in-progress"
+    color: "fbca04"
+    description: "Currently being worked on"
+  
+  - name: "waiting-feedback"
+    color: "d4c5f9"
+    description: "Waiting for feedback from reporter"
+  
+  - name: "ready-to-test"
+    color: "0e8a16"
+    description: "Ready for testing"
+
+  # Component labels
+  - name: "frontend"
+    color: "1d76db"
+    description: "Frontend related changes"
+  
+  - name: "backend"
+    color: "5319e7"
+    description: "Backend related changes"
+  
+  - name: "ci/cd"
+    color: "0052cc"
+    description: "CI/CD pipeline related"
+  
+  - name: "dependencies"
+    color: "0366d6"
+    description: "Pull requests that update a dependency file"
+
+  # Special labels
+  - name: "good first issue"
+    color: "7057ff"
+    description: "Good for newcomers"
+  
+  - name: "help wanted"
+    color: "008672"
+    description: "Extra attention is needed"
+  
+  - name: "wontfix"
+    color: "ffffff"
+    description: "This will not be worked on"
+  
+  - name: "duplicate"
+    color: "cfd3d7"
+    description: "This issue or pull request already exists"

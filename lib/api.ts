@@ -1,9 +1,16 @@
 import { ShortenResponse, SummaryResponse } from "@/types";
+import { getBaseURL } from "./config";
 
-const API_BASE_URL = "https://short.ivanenkomak.com";
+const API_BASE_URL = getBaseURL();
 
 export async function shortenUrl(longUrl: string): Promise<ShortenResponse> {
-  const response = await fetch(`${API_BASE_URL}/shorten?long_url=${encodeURIComponent(longUrl)}`);
+  const response = await fetch(`${API_BASE_URL}/shorten`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ long_url: longUrl }),
+  });
   
   if (!response.ok) {
     throw new Error("Failed to shorten URL");
