@@ -1,37 +1,21 @@
-# Cloudflare Pages configuration
-# This file is optional but provides additional configuration options
+name = "surl2"
+compatibility_date = "2024-11-01"
+compatibility_flags = ["nodejs_compat"]
 
-[build]
-command = "npm run build"
-cwd = "."
-publish = "out"
-
-[build.environment_variables]
-NODE_VERSION = "20"
+[env.production.vars]
 NODE_ENV = "production"
 
-# Custom headers (optional)
-[[headers]]
-for = "/*"
-[headers.values]
-X-Frame-Options = "DENY"
-X-Content-Type-Options = "nosniff"
-Referrer-Policy = "strict-origin-when-cross-origin"
-Permissions-Policy = "camera=(), microphone=(), geolocation=()"
+[env.preview.vars]
+NODE_ENV = "preview"
 
-# Cache control for static assets
-[[headers]]
-for = "/favicon.ico"
-[headers.values]
-Cache-Control = "public, max-age=31536000, immutable"
+[[env.production.routes]]
+pattern = "*"
 
-[[headers]]
-for = "/_next/static/*"
-[headers.values]
-Cache-Control = "public, max-age=31536000, immutable"
+[[env.preview.routes]]
+pattern = "*"name = "surl2"
+compatibility_date = "2024-11-01"
+pages_build_output_dir = "out"
 
-# Redirects (if needed)
-# [[redirects]]
-# from = "/old-path"
-# to = "/new-path"
-# status = 301
+# Static site configuration - no functions needed
+[env.production]
+compatibility_date = "2024-11-01"
