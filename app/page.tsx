@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { shortenUrl, getUrlSummary } from "@/lib/api";
 import { getBaseURL } from "@/lib/config";
 import { SummaryResponse, Analytic } from "@/types";
@@ -20,6 +20,8 @@ export default function Home() {
   const [summaryError, setSummaryError] = useState("");
   const [faviconUrl, setFaviconUrl] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<'shorten' | 'summary'>('shorten');
+  const [isRealTimeEnabled, setIsRealTimeEnabled] = useState(false);
+  const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
 
   const handleShorten = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -94,6 +96,42 @@ export default function Home() {
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleString();
   };
+
+  // Real-time data refresh functionality
+  const refreshAnalytics = async () => {
+    if (!summary || !summaryUrl) return;
+    
+    try {
+      const shortCode = summaryUrl.includes("/")
+        ? summaryUrl.split("/").pop() || summaryUrl
+        : summaryUrl;
+
+      const result = await getUrlSummary(shortCode);
+      setSummary(result);
+      setLastUpdated(new Date());
+      
+      // Update favicon if needed
+      try {
+        const url = new URL(result.long_url);
+        setFaviconUrl(`https://icons.duckduckgo.com/ip3/${url.hostname}.ico`);
+      } catch {
+        // If URL parsing fails, don't set favicon
+      }
+    } catch (err) {
+      console.error("Failed to refresh analytics:", err);
+    }
+  };
+
+  // Auto-refresh effect
+  useEffect(() => {
+    if (!isRealTimeEnabled || !summary) return;
+
+    const interval = setInterval(() => {
+      refreshAnalytics();
+    }, 30000); // Refresh every 30 seconds
+
+    return () => clearInterval(interval);
+  }, [isRealTimeEnabled, summary, summaryUrl]);
 
   // Helper functions to aggregate analytics data
   const getReferrerStats = (analytics: Analytic[]) => {
@@ -171,10 +209,10 @@ export default function Home() {
           {/* Header */}
           <div className="text-center mb-12">
             <h1 className="text-6xl font-bold mb-4 bg-gradient-to-r from-green-600 to-green-500 bg-clip-text text-transparent">
-              SURL
+              URL Shortener
             </h1>
             <p className="text-xl text-gray-600 dark:text-gray-300">
-              URL Shortener & Analytics
+              Create shorter URLs and track link analytics
             </p>
           </div>
 
@@ -429,17 +467,39 @@ export default function Home() {
                           Page views by source
                         </h3>
                         <div className="flex items-center gap-3">
-                          <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
-                            <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                              <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clipRule="evenodd" />
+                          <button
+                            onClick={() => {
+                              setIsRealTimeEnabled(!isRealTimeEnabled);
+                              if (!isRealTimeEnabled) {
+                                refreshAnalytics();
+                              }
+                            }}
+                            className={`flex items-center gap-2 text-sm px-3 py-1.5 rounded-lg transition-all duration-200 ${
+                              isRealTimeEnabled
+                                ? 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400'
+                                : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700'
+                            }`}
+                          >
+                            <div className={`w-2 h-2 rounded-full ${
+                              isRealTimeEnabled ? 'bg-green-500 animate-pulse' : 'bg-gray-400'
+                            }`}></div>
+                            {isRealTimeEnabled ? 'Real-time active' : 'Enable real-time'}
+                            {lastUpdated && isRealTimeEnabled && (
+                              <span className="text-xs opacity-75">
+                                • Updated {lastUpdated.toLocaleTimeString()}
+                              </span>
+                            )}
+                          </button>
+                          <button
+                            onClick={refreshAnalytics}
+                            className="flex items-center gap-2 text-sm px-3 py-1.5 rounded-lg text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 transition-all duration-200"
+                            title="Refresh analytics data"
+                          >
+                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
                             </svg>
-                            Real-time data
-                          </div>
-                          <select className="text-sm border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-1.5 bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300">
-                            <option>5 items</option>
-                            <option>10 items</option>
-                            <option>All items</option>
-                          </select>
+                            Refresh
+                          </button>
                         </div>
                       </div>
                       
